@@ -11,7 +11,7 @@ const SYSTEM_SUBDOMAINS = new Set([
 ]);
 
 // Identify the tenant company from the incoming Host header.
-// Order: verified custom_domain → subdomain of MAIN_DOMAIN → none.
+// Order: subdomain of MAIN_DOMAIN → none.
 // On localhost / IP hosts we no-op so dev still works.
 export const resolveCompanyFromDomain = async (req, res, next) => {
   try {
@@ -28,15 +28,10 @@ export const resolveCompanyFromDomain = async (req, res, next) => {
       return next();
     }
 
-    let company = await Company.findOne({
-      custom_domain: host,
-      custom_domain_verified: true,
-    });
+    let company = null;
     let domainType = "main";
 
-    if (company) {
-      domainType = "custom";
-    } else if (mainDomain && host.endsWith(`.${mainDomain}`) && host !== mainDomain) {
+    if (mainDomain && host.endsWith(`.${mainDomain}`) && host !== mainDomain) {
       const subdomain = host.slice(0, -1 - mainDomain.length);
       if (subdomain && !SYSTEM_SUBDOMAINS.has(subdomain)) {
         company = await Company.findOne({ subdomain });

@@ -55,24 +55,6 @@ const companySchema = new mongoose.Schema(
       maxlength: 30,
     },
 
-    // Custom domain (Scenario C) — premium, customer-supplied.
-    custom_domain: {
-      type: String,
-      unique: true,
-      sparse: true,
-      lowercase: true,
-      trim: true,
-    },
-    custom_domain_verified: { type: Boolean, default: false },
-    custom_domain_verification_token: { type: String, default: null },
-    custom_domain_added_at: { type: Date, default: null },
-    custom_domain_verified_at: { type: Date, default: null },
-    ssl_status: {
-      type: String,
-      enum: ["none", "pending", "active", "failed"],
-      default: "none",
-    },
-
     plan: { type: String, default: "free" },
     max_employees: { type: Number, default: 100 },
     is_active: { type: Boolean, default: true },

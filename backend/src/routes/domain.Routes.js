@@ -2,9 +2,6 @@ import express from "express";
 import { protect } from "../middleware/auth.js";
 import {
   getCompanyByHost,
-  addCustomDomain,
-  verifyCustomDomain,
-  removeCustomDomain,
   updateSubdomain,
 } from "../controllers/domain.Controller.js";
 
@@ -14,9 +11,6 @@ const router = express.Router();
 router.get("/info", getCompanyByHost);
 
 // Admin only
-router.post("/custom-domain", protect, addCustomDomain);
-router.post("/custom-domain/verify", protect, verifyCustomDomain);
-router.delete("/custom-domain", protect, removeCustomDomain);
 router.put("/subdomain", protect, updateSubdomain);
 
 export default router;

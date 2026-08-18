@@ -48,7 +48,6 @@ import {
 import { initCronJobs } from "./src/jobs/index.js";
 import { startAutoCheckoutCron } from "./src/cron/autoCheckout.js";
 import { resolveCompanyFromDomain } from "./src/middleware/domainResolver.js";
-import Company from "./src/models/Company.js";
 import "./src/config/cloudinary.js";
 import "./src/config/email.js";
 import { initSocket } from "./src/sockets/index.js";
@@ -83,30 +82,6 @@ const MAIN_DOMAIN = normalizeHostname(process.env.MAIN_DOMAIN || "");
 
 console.log("[CORS] Allowed Origins:", JSON.stringify(allowedOrigins));
 
-// Cache verified custom domains so we don't hit Mongo on every preflight.
-let customDomainCache = new Set();
-let lastCacheRefresh = 0;
-
-const refreshCustomDomains = async () => {
-  try {
-    const rows = await Company.find(
-      { custom_domain_verified: true, custom_domain: { $ne: null } },
-      "custom_domain",
-    ).lean();
-
-    customDomainCache = new Set(
-      rows
-        .map((row) => normalizeHostname(row.custom_domain))
-        .filter(Boolean),
-    );
-    lastCacheRefresh = Date.now();
-  } catch (err) {
-    console.error("[CORS] failed to refresh custom-domain cache:", err.message);
-  }
-};
-
-refreshCustomDomains();
-
 const isAllowedOrigin = (origin) => {
   if (!origin) return true;
 
@@ -127,8 +102,6 @@ const isAllowedOrigin = (origin) => {
     return true;
   }
 
-  if (customDomainCache.has(host)) return true;
-
   return false;
 };
 
@@ -140,18 +113,6 @@ const corsOptions = {
 
     if (isAllowedOrigin(origin)) {
       return callback(null, true);
-    }
-
-    if (Date.now() - lastCacheRefresh > 60_000) {
-      refreshCustomDomains().then(() => {
-        if (isAllowedOrigin(origin)) {
-          return callback(null, true);
-        }
-
-        console.warn("[CORS] Blocked origin:", cleanOrigin || null);
-        return callback(null, false);
-      });
-      return;
     }
 
     console.warn("[CORS] Blocked origin:", cleanOrigin || null);
@@ -169,7 +130,7 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 app.use(cookieParser());
 app.use(compression());
 
-// Resolve tenant company from Host header (subdomain or verified custom domain).
+// Resolve tenant company from Host header (subdomain).
 // Must run before routes so /api/domains/info and any tenant-aware code see it.
 app.use(resolveCompanyFromDomain);
 
@@ -190,9 +151,6 @@ const limiter = rateLimit({
 if (process.env.NODE_ENV === "production") {
   app.use("/api", limiter);
 }
-
-// Bust the cache as soon as a custom domain gets verified/removed.
-export const invalidateCorsCache = () => refreshCustomDomains();
 
 // ==========================================
 // HEALTH CHECK

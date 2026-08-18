@@ -1005,7 +1005,7 @@ function DeleteWorkspaceModal({ workspace, onClose, onDeleted }) {
               <p className="mt-1 text-rose-200/70">
                 Every member will be removed from this workspace, all
                 attendance records, projects, tasks, and messages will become
-                inaccessible. Subdomain and custom domains will be released.
+                inaccessible. The workspace subdomain will be released.
               </p>
             </div>
 

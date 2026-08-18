@@ -38,7 +38,7 @@ export const CompanyProvider = ({ children }) => {
   const [loading, setLoading] = useState(false);
 
   // On app load, ask the backend which company this hostname maps to.
-  // Lets us apply branding before login and show subdomain/custom-domain context.
+  // Lets us apply branding before login and show subdomain context.
   useEffect(() => {
     let cancelled = false;
     base44.domains

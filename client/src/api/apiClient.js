@@ -599,7 +599,7 @@ const companies = {
   },
 };
 
-// ========== DOMAINS (subdomain + custom domain) ==========
+// ========== DOMAINS (subdomain) ==========
 const domains = {
   // Public — used on app load to discover the tenant from the Host header.
   info: async () => {
@@ -608,18 +608,6 @@ const domains = {
   },
   updateSubdomain: async (subdomain) => {
     const res = await api.put("/domains/subdomain", { subdomain });
-    return res.data;
-  },
-  addCustomDomain: async (domain) => {
-    const res = await api.post("/domains/custom-domain", { domain });
-    return res.data;
-  },
-  verifyCustomDomain: async () => {
-    const res = await api.post("/domains/custom-domain/verify", {});
-    return res.data;
-  },
-  removeCustomDomain: async () => {
-    const res = await api.delete("/domains/custom-domain");
     return res.data;
   },
 };
