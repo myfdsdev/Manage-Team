@@ -26,6 +26,9 @@ const PUBLIC_PAGES = [
   "Welcome",
   "Login",
   "Register",
+  "join-admin",
+  "join-member",
+  "no-access",
   "PrivacyPolicy",
   "AccessDenied",
   "ResetPassword",
@@ -35,10 +38,14 @@ const NO_LAYOUT_PAGES = [
   "Welcome",
   "Login",
   "Register",
+  "join-admin",
+  "join-member",
+  "no-access",
   "CompleteProfile",
   "AccessDenied",
   "ResetPassword",
   "CompanySetup",
+  "PrivacyPolicy",
 ];
 
 const ADMIN_PAGES = [
@@ -76,6 +83,13 @@ const LayoutWrapper = ({ children, currentPageName }) => {
 const getUserRedirectPage = (user) => {
   if (!user) return "/Welcome";
   if (user.role === "super_admin") return "/SuperAdmin";
+
+  // No workspace yet AND not unlocked via /join-admin → they can't create a
+  // workspace, so send them to the message page instead of CompanySetup.
+  // (Existing workspace members keep flowing to their dashboard below.)
+  if (!user.company_id && !user.has_app_access) {
+    return "/no-access";
+  }
 
   const isProfileComplete =
     user.mobile_number && user.department;
@@ -134,7 +148,24 @@ const ProtectedRoute = ({ pageName, Page }) => {
   // Skip every gate below for them.
   const isSuperAdmin = user?.role === "super_admin";
 
-  if (!isSuperAdmin && pageName !== "CompleteProfile") {
+  // Access gate — a logged-in user who hasn't unlocked via /join-admin AND isn't
+  // in a workspace yet can ONLY see the message page. This blocks the whole
+  // onboarding surface (CompanySetup, CompleteProfile) and the rest of the app
+  // for normal logins. Existing workspace members (they have a company_id) and
+  // unlocked users pass through. Invited teammates arrive at CompanySetup with
+  // ?invite/?code and are let through so they can still JOIN an existing team.
+  const isBlocked = !isSuperAdmin && !user?.has_app_access && !user?.company_id;
+  if (isBlocked) {
+    const params = new URLSearchParams(location.search);
+    const hasInvite = params.get("invite") || params.get("code");
+    if (!(pageName === "CompanySetup" && hasInvite)) {
+      return <Navigate to="/no-access" replace />;
+    }
+  }
+
+  // Profile completion is required before the app, but NOT before creating a
+  // workspace — a freshly unlocked user goes straight to CompanySetup.
+  if (!isSuperAdmin && !["CompleteProfile", "CompanySetup"].includes(pageName)) {
     const isProfileComplete =
       user?.mobile_number && user?.department;
 

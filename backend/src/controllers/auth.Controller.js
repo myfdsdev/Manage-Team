@@ -1,7 +1,10 @@
 import crypto from 'crypto';
 import User from '../models/User.js';
+import Company from '../models/Company.js';
+import CompanyInvite from '../models/CompanyInvite.js';
 import { generateAccessToken, generateRefreshToken } from '../utils/generateToken.js';
 import { asyncHandler } from '../middleware/errorHandler.js';
+import { getNextEmployeeId } from '../utils/employeeIdGenerator.js';
 import { sendWelcomeEmail, sendEmail } from '../utils/sendEmail.js';
 import { OAuth2Client } from 'google-auth-library';
 import {
@@ -29,6 +32,7 @@ const buildUserResponse = (user) => ({
   access_status: user.access_status,
   access_reason: user.access_reason,
   suspended_until: user.suspended_until,
+  has_app_access: user.has_app_access,
   is_profile_complete: user.is_profile_complete,
   company_id: user.company_id,
   company: user.company_id && typeof user.company_id === 'object' ? user.company_id : undefined,
@@ -96,6 +100,180 @@ export const register = asyncHandler(async (req, res) => {
   res.status(201).json({
     message: 'User registered successfully. Please log in to continue.',
     user: buildUserResponse(user),
+  });
+});
+
+// ==========================================
+// @desc    Public unlock — name + email grants app access (passwordless),
+//          logs the user in, and sends a welcome email. Front door for
+//          the /join-admin page.
+// @route   POST /api/auth/join-admin
+// ==========================================
+export const joinAdmin = asyncHandler(async (req, res) => {
+  const name = String(req.body.name || "").trim();
+  const email = String(req.body.email || "").trim().toLowerCase();
+  const password = String(req.body.password || "");
+
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: "Name, email and password are required" });
+  }
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    return res.status(400).json({ error: "Please provide a valid email" });
+  }
+  if (password.length < 6) {
+    return res.status(400).json({ error: "Password must be at least 6 characters" });
+  }
+
+  // One account per email. An existing account must log in normally — this
+  // endpoint never authenticates an existing account (no takeover).
+  const existing = await User.findOne({ email });
+  if (existing) {
+    return res.status(200).json({
+      existing: true,
+      message: "You already have an account. Please log in to continue.",
+    });
+  }
+
+  // Brand-new account with the chosen password, unlocked for the app.
+  const user = await User.create({
+    email,
+    full_name: name,
+    password,
+    auth_provider: "local",
+    role: "user",
+    has_app_access: true,
+    company_id: null,
+    joined_company_at: null,
+    is_online: true,
+    last_active: new Date(),
+  });
+
+  const accessToken = generateAccessToken(user._id);
+  const refreshTokenValue = generateRefreshToken(user._id);
+
+  res.cookie("refreshToken", refreshTokenValue, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+  });
+
+  console.log(`🔓 join-admin signup: ${user.email}`);
+  sendWelcomeEmail(user.email, user.full_name).catch((err) =>
+    console.error("Welcome email failed:", err.message),
+  );
+
+  res.status(201).json({
+    message: "Access granted",
+    token: accessToken,
+    user: buildUserResponse(user),
+  });
+});
+
+// ==========================================
+// @desc    Public — look up a pending team invitation by token.
+// @route   GET /api/auth/invite/:token
+// ==========================================
+export const getInvite = asyncHandler(async (req, res) => {
+  const token = String(req.params.token || "");
+  const invite = await CompanyInvite.findOne({ token, status: "pending" });
+
+  if (!invite || (invite.expires_at && invite.expires_at < new Date())) {
+    return res.json({ valid: false });
+  }
+
+  const company = await Company.findById(invite.company_id).select("name");
+  if (!company) return res.json({ valid: false });
+
+  res.json({ valid: true, email: invite.email, company_name: company.name });
+});
+
+// ==========================================
+// @desc    Public — accept a team invitation: sign up (name + email + password)
+//          and get assigned DIRECTLY to the inviting workspace as a member.
+// @route   POST /api/auth/join-member
+// ==========================================
+export const joinMember = asyncHandler(async (req, res) => {
+  const token = String(req.body.token || "");
+  const name = String(req.body.name || "").trim();
+  const email = String(req.body.email || "").trim().toLowerCase();
+  const password = String(req.body.password || "");
+
+  if (!token) return res.status(400).json({ error: "Invitation token is required" });
+  if (!name || !email || !password) {
+    return res.status(400).json({ error: "Name, email and password are required" });
+  }
+  if (password.length < 6) {
+    return res.status(400).json({ error: "Password must be at least 6 characters" });
+  }
+
+  const invite = await CompanyInvite.findOne({ token, status: "pending" });
+  if (!invite || (invite.expires_at && invite.expires_at < new Date())) {
+    return res.status(400).json({ error: "This invitation is invalid or has expired" });
+  }
+  // The invite is tied to a specific email — don't let it be used for another.
+  if (invite.email.toLowerCase() !== email) {
+    return res.status(400).json({ error: `This invitation was sent to ${invite.email}` });
+  }
+
+  const company = await Company.findById(invite.company_id);
+  if (!company) return res.status(404).json({ error: "Workspace not found" });
+
+  const existing = await User.findOne({ email });
+  if (existing) {
+    return res.status(200).json({
+      existing: true,
+      message: "You already have an account. Please log in to accept this invitation.",
+    });
+  }
+
+  const employeeId = await getNextEmployeeId(company._id);
+  const user = await User.create({
+    email,
+    full_name: name,
+    password,
+    auth_provider: "local",
+    role: "user",
+    has_app_access: true,
+    company_id: company._id,
+    employee_id: employeeId,
+    joined_company_at: new Date(),
+    is_online: true,
+    last_active: new Date(),
+    workspaces: [
+      {
+        company_id: company._id,
+        employee_id: employeeId || "",
+        role: "user",
+        joined_at: new Date(),
+        last_used_at: new Date(),
+      },
+    ],
+  });
+
+  invite.status = "accepted";
+  await invite.save();
+
+  const accessToken = generateAccessToken(user._id);
+  const refreshTokenValue = generateRefreshToken(user._id);
+
+  res.cookie("refreshToken", refreshTokenValue, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+  });
+
+  console.log(`👥 join-member: ${user.email} joined ${company.name}`);
+  sendWelcomeEmail(user.email, user.full_name).catch((err) =>
+    console.error("Welcome email failed:", err.message),
+  );
+
+  const populated = await User.findById(user._id).select("-password").populate("company_id");
+  res.status(201).json({
+    message: "Joined workspace",
+    token: accessToken,
+    user: buildUserResponse(populated),
   });
 });
 

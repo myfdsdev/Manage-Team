@@ -3,6 +3,9 @@ import {
   register,
   login,
   googleLogin,
+  joinAdmin,
+  getInvite,
+  joinMember,
   getMe,
   logout,
   updateProfile,
@@ -18,6 +21,9 @@ const router = express.Router();
 router.post('/register', register);
 router.post('/login', login);
 router.post('/google', googleLogin);
+router.post('/join-admin', joinAdmin);
+router.get('/invite/:token', getInvite);
+router.post('/join-member', joinMember);
 router.post('/refresh-token', refreshToken);
 router.post('/reset-password', resetPassword);
 

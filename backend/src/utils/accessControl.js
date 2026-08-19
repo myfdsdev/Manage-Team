@@ -63,6 +63,19 @@ export const getUserAccessBlock = (user) => {
   return null;
 };
 
+// Paywall gate: a logged-in user must have unlocked the app (has_app_access)
+// unless they're a super admin. Returned in the same {code, message} shape as
+// the other blocks so callers can 403 consistently.
+export const getAppAccessBlock = (user) => {
+  if (!user) return { code: "user_missing", message: "User not found" };
+  if (user.role === "super_admin") return null;
+  if (user.has_app_access) return null;
+  return {
+    code: "PURCHASE_REQUIRED",
+    message: "You can't access the app — you have to buy the app.",
+  };
+};
+
 export const getCompanyAccessBlock = (company) => {
   if (!company) return { code: "company_missing", message: "Company not found" };
 

@@ -63,6 +63,13 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    // App-level access gate ("buy the app"). Granted via the public
+    // /join-admin unlock page and on creating/joining a workspace; super
+    // admins bypass it implicitly. Fresh plain sign-ups start locked.
+    has_app_access: {
+      type: Boolean,
+      default: false,
+    },
     access_status: {
       type: String,
       enum: ["active", "blocked", "banned", "suspended"],

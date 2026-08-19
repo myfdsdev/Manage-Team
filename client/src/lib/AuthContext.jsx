@@ -77,6 +77,36 @@ export const AuthProvider = ({ children }) => {
     return result;
   };
 
+  // Passwordless unlock via the public /join-admin page. If the email already
+  // belongs to a real account the backend returns { existing: true } and no
+  // token — the caller redirects to normal login instead.
+  const joinAdmin = async (name, email, password) => {
+    const result = await base44.auth.joinAdmin(name, email, password);
+
+    if (result?.token && result?.user) {
+      setUser(result.user);
+      setIsAuthenticated(true);
+      setAuthError(null);
+      window.dispatchEvent(new Event('app-settings-refresh'));
+    }
+
+    return result;
+  };
+
+  // Accept a team invitation — signs up and gets assigned to the workspace.
+  const joinMember = async (payload) => {
+    const result = await base44.auth.joinMember(payload);
+
+    if (result?.token && result?.user) {
+      setUser(result.user);
+      setIsAuthenticated(true);
+      setAuthError(null);
+      window.dispatchEvent(new Event('app-settings-refresh'));
+    }
+
+    return result;
+  };
+
   const register = async (userData) => {
     const result = await base44.auth.register(userData);
 
@@ -117,6 +147,8 @@ export const AuthProvider = ({ children }) => {
         appPublicSettings,
         login,
         googleLogin,
+        joinAdmin,
+        joinMember,
         register,
         logout,
         navigateToLogin,

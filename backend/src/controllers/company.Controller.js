@@ -9,6 +9,7 @@ import { sendCompanyInviteEmail } from "../utils/sendEmail.js";
 import {
   clearExpiredCompanySuspension,
   getCompanyAccessBlock,
+  getAppAccessBlock,
 } from "../utils/accessControl.js";
 
 const buildUserResponse = (user) => ({
@@ -77,6 +78,14 @@ export const createCompany = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
   if (!user) return res.status(404).json({ error: "User not found" });
 
+  // Only users who unlocked via /join-admin (or super admins) may create a
+  // workspace. Normal-login users hit this gate; the frontend shows them the
+  // message page instead of the create-workspace screen.
+  const appBlock = getAppAccessBlock(user);
+  if (appBlock) {
+    return res.status(403).json({ error: appBlock.message, code: appBlock.code });
+  }
+
   const prefix = (req.body.prefix || generatePrefix(payload.name)).toUpperCase().slice(0, 4);
   const inviteCode = await generateUniqueInviteCode();
   const subdomain = await Company.generateSubdomain(payload.name);
@@ -116,6 +125,8 @@ export const createCompany = asyncHandler(async (req, res) => {
     joined_at: new Date(),
     last_used_at: new Date(),
   });
+  // Owning a workspace unlocks the app.
+  user.has_app_access = true;
   await user.save();
 
   const settings = await AppSettings.getForCompany(company._id);
@@ -181,6 +192,8 @@ export const joinCompany = asyncHandler(async (req, res) => {
     joined_at: existingMembership?.joined_at || new Date(),
     last_used_at: new Date(),
   });
+  // Joining a workspace (e.g. via an admin's invite) unlocks the app.
+  user.has_app_access = true;
   await user.save();
 
   if (req.body.invite_token) {
@@ -525,9 +538,7 @@ export const inviteByEmail = asyncHandler(async (req, res) => {
   const frontendUrl = (process.env.FRONTEND_URL || "http://localhost:5173")
     .split(",")[0]
     .trim();
-  const inviteLink = `${frontendUrl}/CompanySetup?code=${encodeURIComponent(
-    company.invite_code,
-  )}&invite=${encodeURIComponent(token)}`;
+  const inviteLink = `${frontendUrl}/join-member?token=${encodeURIComponent(token)}`;
 
   await sendCompanyInviteEmail(
     email,

@@ -206,6 +206,26 @@ const auth = {
     }
     return res.data;
   },
+  joinAdmin: async (name, email, password) => {
+    const res = await api.post("/auth/join-admin", { name, email, password });
+    if (res.data.token) {
+      setToken(res.data.token);
+      connectSocket();
+    }
+    return res.data;
+  },
+  getInvite: async (token) => {
+    const res = await api.get(`/auth/invite/${encodeURIComponent(token)}`);
+    return res.data;
+  },
+  joinMember: async ({ token, name, email, password }) => {
+    const res = await api.post("/auth/join-member", { token, name, email, password });
+    if (res.data.token) {
+      setToken(res.data.token);
+      connectSocket();
+    }
+    return res.data;
+  },
   register: async (userData) => {
     const res = await api.post("/auth/register", userData);
     disconnectSocket();

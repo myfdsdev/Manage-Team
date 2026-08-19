@@ -33,6 +33,9 @@ import CompanySettings from './pages/admin/CompanySettings';
 import DomainSettings from './pages/admin/DomainSettings';
 import MySalary from './pages/MySalary';
 import SuperAdmin from './pages/SuperAdmin';
+import JoinAdmin from './pages/JoinAdmin';
+import JoinMember from './pages/JoinMember';
+import PurchaseRequired from './components/PurchaseRequired';
 
 export const PAGES = {
     "AccessDenied": AccessDenied,
@@ -68,6 +71,9 @@ export const PAGES = {
     "Welcome": Welcome,
     "Login": Login,
     "Register": Register,
+    "join-admin": JoinAdmin,
+    "join-member": JoinMember,
+    "no-access": PurchaseRequired,
 };
 
 export const pagesConfig = {

@@ -12,13 +12,11 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Mail, Loader2 } from "lucide-react";
 import { toast } from "react-hot-toast";
 
 export default function InviteUserDialog({ open, onOpenChange }) {
   const [email, setEmail] = useState('');
-  const [role, setRole] = useState('user');
   const queryClient = useQueryClient();
 
   const inviteUserMutation = useMutation({
@@ -26,22 +24,22 @@ export default function InviteUserDialog({ open, onOpenChange }) {
       if (!email.trim()) {
         throw new Error('Email is required');
       }
-      
+
       // Validate email format
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email.trim())) {
         throw new Error('Invalid email format');
       }
 
-      await base44.users.inviteUser(email.trim(), role);
-      return { email: email.trim(), role };
+      await base44.companies.inviteByEmail(email.trim());
+      return { email: email.trim() };
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['employees'] });
+      queryClient.invalidateQueries({ queryKey: ['invites'] });
       setEmail('');
-      setRole('user');
       onOpenChange(false);
-      toast.success('Invitation sent successfully!');
+      toast.success('Invitation email sent!');
     },
     onError: (error) => {
       toast.error(error.message || 'Failed to send invitation');
@@ -82,23 +80,6 @@ export default function InviteUserDialog({ open, onOpenChange }) {
                   disabled={inviteUserMutation.isPending}
                 />
               </div>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="role">Role</Label>
-              <Select value={role} onValueChange={setRole} disabled={inviteUserMutation.isPending}>
-                <SelectTrigger id="role">
-                  <SelectValue placeholder="Select role" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="user">Team Member</SelectItem>
-                  <SelectItem value="admin">Admin</SelectItem>
-                </SelectContent>
-              </Select>
-              <p className="text-xs text-lime-100/50">
-                {role === 'admin' 
-                  ? 'Admins have full access to manage employees and attendance'
-                  : 'Team members can view and manage their own attendance'}
-              </p>
             </div>
           </div>
           <DialogFooter>

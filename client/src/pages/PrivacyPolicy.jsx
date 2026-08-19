@@ -1,11 +1,14 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { Shield, Lock, Eye, Database, Bell, MapPin } from "lucide-react";
+import { Shield, Lock, Eye, Database, MapPin } from "lucide-react";
+
+const cardClass = "border-lime-400/15 bg-[#020806] text-white shadow-sm";
+const bodyClass = "space-y-3 text-white/70";
 
 export default function PrivacyPolicy() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black text-white">
       <div className="max-w-4xl mx-auto p-4 md:p-6 lg:p-8">
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -13,25 +16,25 @@ export default function PrivacyPolicy() {
           className="mb-8"
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center">
-              <Shield className="w-6 h-6 text-indigo-600" />
+            <div className="w-12 h-12 bg-lime-400/10 border border-lime-400/30 rounded-xl flex items-center justify-center">
+              <Shield className="w-6 h-6 text-lime-300" />
             </div>
             <div>
-              <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Privacy Policy</h1>
-              <p className="text-gray-500 text-sm">Last updated: January 24, 2026</p>
+              <h1 className="text-2xl md:text-3xl font-bold text-white">Privacy Policy</h1>
+              <p className="text-white/50 text-sm">Last updated: January 24, 2026</p>
             </div>
           </div>
         </motion.div>
 
         <div className="space-y-6">
-          <Card className="border-0 shadow-sm">
+          <Card className={cardClass}>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Eye className="w-5 h-5 text-indigo-600" />
+              <CardTitle className="flex items-center gap-2 text-lg text-white">
+                <Eye className="w-5 h-5 text-lime-300" />
                 Information We Collect
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-gray-700">
+            <CardContent className={bodyClass}>
               <p>We collect information that you provide directly to us:</p>
               <ul className="list-disc list-inside space-y-2 ml-4">
                 <li>Name, email address, and employee ID</li>
@@ -44,14 +47,14 @@ export default function PrivacyPolicy() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card className={cardClass}>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Database className="w-5 h-5 text-indigo-600" />
+              <CardTitle className="flex items-center gap-2 text-lg text-white">
+                <Database className="w-5 h-5 text-lime-300" />
                 How We Use Your Information
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-gray-700">
+            <CardContent className={bodyClass}>
               <p>We use the information we collect to:</p>
               <ul className="list-disc list-inside space-y-2 ml-4">
                 <li>Track and manage employee attendance</li>
@@ -64,37 +67,37 @@ export default function PrivacyPolicy() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card className={cardClass}>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <MapPin className="w-5 h-5 text-indigo-600" />
-                Permissions & Data Collection
+              <CardTitle className="flex items-center gap-2 text-lg text-white">
+                <MapPin className="w-5 h-5 text-lime-300" />
+                Permissions &amp; Data Collection
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-gray-700">
+            <CardContent className={bodyClass}>
               <div>
-                <h4 className="font-semibold mb-2">Location Access</h4>
+                <h4 className="font-semibold mb-2 text-white">Location Access</h4>
                 <p>We may request location access to verify attendance check-ins. Location data is used only for attendance verification and is not shared with third parties.</p>
               </div>
               <div>
-                <h4 className="font-semibold mb-2">Camera Access</h4>
+                <h4 className="font-semibold mb-2 text-white">Camera Access</h4>
                 <p>Camera access is requested only for uploading profile photos. We do not access your camera without your explicit permission.</p>
               </div>
               <div>
-                <h4 className="font-semibold mb-2">Notifications</h4>
+                <h4 className="font-semibold mb-2 text-white">Notifications</h4>
                 <p>We send notifications for attendance reminders, check-in confirmations, and leave status updates. You can manage notification preferences in your device settings.</p>
               </div>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card className={cardClass}>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Lock className="w-5 h-5 text-indigo-600" />
+              <CardTitle className="flex items-center gap-2 text-lg text-white">
+                <Lock className="w-5 h-5 text-lime-300" />
                 Data Security
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-gray-700">
+            <CardContent className={bodyClass}>
               <p>We take data security seriously and implement appropriate measures to protect your information:</p>
               <ul className="list-disc list-inside space-y-2 ml-4">
                 <li>All data is encrypted in transit and at rest</li>
@@ -105,14 +108,14 @@ export default function PrivacyPolicy() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card className={cardClass}>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <Shield className="w-5 h-5 text-indigo-600" />
+              <CardTitle className="flex items-center gap-2 text-lg text-white">
+                <Shield className="w-5 h-5 text-lime-300" />
                 Your Rights
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-gray-700">
+            <CardContent className={bodyClass}>
               <p>You have the right to:</p>
               <ul className="list-disc list-inside space-y-2 ml-4">
                 <li>Access your personal information</li>
@@ -124,38 +127,38 @@ export default function PrivacyPolicy() {
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card className={cardClass}>
             <CardHeader>
-              <CardTitle className="text-lg">Data Retention</CardTitle>
+              <CardTitle className="text-lg text-white">Data Retention</CardTitle>
             </CardHeader>
-            <CardContent className="text-gray-700">
+            <CardContent className="text-white/70">
               <p>We retain your attendance and leave records as per company policy and legal requirements. Personal information is retained for as long as you are an active employee, and for a reasonable period thereafter for legal and audit purposes.</p>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card className={cardClass}>
             <CardHeader>
-              <CardTitle className="text-lg">Third-Party Services</CardTitle>
+              <CardTitle className="text-lg text-white">Third-Party Services</CardTitle>
             </CardHeader>
-            <CardContent className="text-gray-700">
+            <CardContent className="text-white/70">
               <p>This application is hosted on the Base44 platform. We do not share your personal information with third parties except as necessary to provide our services or as required by law.</p>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm">
+          <Card className={cardClass}>
             <CardHeader>
-              <CardTitle className="text-lg">Changes to This Policy</CardTitle>
+              <CardTitle className="text-lg text-white">Changes to This Policy</CardTitle>
             </CardHeader>
-            <CardContent className="text-gray-700">
+            <CardContent className="text-white/70">
               <p>We may update this privacy policy from time to time. We will notify you of any changes by updating the "Last updated" date at the top of this policy.</p>
             </CardContent>
           </Card>
 
-          <Card className="border-0 shadow-sm bg-indigo-50">
+          <Card className="border-lime-400/25 bg-lime-400/[0.06] text-white shadow-sm">
             <CardHeader>
-              <CardTitle className="text-lg">Contact Us</CardTitle>
+              <CardTitle className="text-lg text-lime-200">Contact Us</CardTitle>
             </CardHeader>
-            <CardContent className="text-gray-700">
+            <CardContent className="text-white/70">
               <p>If you have any questions about this privacy policy or our data practices, please contact your organization's HR department or system administrator.</p>
             </CardContent>
           </Card>
