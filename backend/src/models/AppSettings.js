@@ -16,7 +16,7 @@ const appSettingsSchema = new mongoose.Schema(
     },
     app_logo: {
       type: String,
-      default: "",
+      default: "https://res.cloudinary.com/dwhtiuoes/image/upload/v1787044902/brand/manageteam-email-logo.png",
     },
     html_title: {
       type: String,
