@@ -99,11 +99,11 @@ export const sendEmail = async ({ to, subject, html, text, replyTo }) => {
     return null;
   }
 
-  const fromEmail = process.env.SMTP_FROM || process.env.SMTP_USER;
-  const fromName = process.env.SMTP_FROM_NAME || APP_NAME;
+  const fromEmail = process.env.RESEND_FROM || process.env.SMTP_FROM;
+  const fromName = process.env.RESEND_FROM_NAME || APP_NAME;
 
   if (!fromEmail) {
-    console.error("❌ Cannot send email: SMTP_FROM not set!");
+    console.error("❌ Cannot send email: RESEND_FROM not set!");
     return null;
   }
 

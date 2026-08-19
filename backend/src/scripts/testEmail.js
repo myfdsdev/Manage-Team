@@ -3,7 +3,7 @@
 //   node src/scripts/testEmail.js you@example.com
 //
 // Requires RESEND_API_KEY in backend/.env and a verified sending domain
-// (or use Resend's shared onboarding@resend.dev as SMTP_FROM for a first test,
+// (or use Resend's shared onboarding@resend.dev as RESEND_FROM for a first test,
 // which can only deliver to the email on your own Resend account).
 import "dotenv/config";
 import { sendWelcomeEmail } from "../utils/sendEmail.js";
