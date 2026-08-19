@@ -11,7 +11,7 @@ const appSettingsSchema = new mongoose.Schema(
     },
     app_name: {
       type: String,
-      default: "AttendEase",
+      default: "manageteam",
       trim: true,
     },
     app_logo: {
@@ -20,7 +20,7 @@ const appSettingsSchema = new mongoose.Schema(
     },
     html_title: {
       type: String,
-      default: "AttendEase",
+      default: "manageteam",
       trim: true,
     },
     favicon: {

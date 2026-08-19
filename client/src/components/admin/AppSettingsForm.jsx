@@ -30,9 +30,9 @@ export default function AppSettingsForm() {
 
   useEffect(() => {
     const data = {
-      app_name: settings?.app_name || 'AttendEase',
+      app_name: settings?.app_name || 'manageteam',
       app_logo: settings?.app_logo || '',
-      html_title: settings?.html_title || 'AttendEase',
+      html_title: settings?.html_title || 'manageteam',
       favicon: settings?.favicon || '',
       primary_color: settings?.primary_color || '#6366F1',
       auto_checkout_enabled: settings?.auto_checkout_enabled ?? true,
@@ -126,7 +126,7 @@ export default function AppSettingsForm() {
             <Input
               value={formData.app_name}
               onChange={(e) => setFormData({ ...formData, app_name: e.target.value })}
-              placeholder="e.g. AttendEase"
+              placeholder="e.g. manageteam"
               className="border border-lime-400/10"
             />
             <p className="text-xs text-lime-100/45">
@@ -139,7 +139,7 @@ export default function AppSettingsForm() {
             <Input
               value={formData.html_title}
               onChange={(e) => setFormData({ ...formData, html_title: e.target.value })}
-              placeholder="e.g. AttendEase - Workforce Management"
+              placeholder="e.g. manageteam - Workforce Management"
               className="border border-lime-400/10"
             />
             <p className="text-xs text-lime-100/45">
@@ -175,7 +175,7 @@ export default function AppSettingsForm() {
                   )}
                 </div>
                 <span className="text-2xl font-bold text-white">
-                  {formData.app_name || 'AttendEase'}
+                  {formData.app_name || 'manageteam'}
                 </span>
               </div>
               <p className="max-w-xs text-right text-xs text-lime-100/45">

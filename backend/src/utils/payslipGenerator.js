@@ -47,7 +47,7 @@ export const generatePayslipPDF = async (payslip, user, appSettings) => {
         .font('Helvetica-Bold')
         .fontSize(20)
         .fillColor('#111827')
-        .text(appSettings.app_name || 'AttendEase', 120, 48);
+        .text(appSettings.app_name || 'manageteam', 120, 48);
       doc
         .font('Helvetica')
         .fontSize(11)

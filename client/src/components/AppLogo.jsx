@@ -33,7 +33,7 @@ export default function AppLogo({ size = 'md', iconOnly = false, className = '' 
 
       {!iconOnly && (
         <span className={`${s.text} font-bold text-white dark:text-white`}>
-          {settings?.app_name || 'AttendEase'}
+          {settings?.app_name || 'manageteam'}
         </span>
       )}
     </div>

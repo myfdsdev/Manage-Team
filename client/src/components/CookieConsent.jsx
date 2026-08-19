@@ -94,7 +94,7 @@ export default function CookieConsent() {
                   We use cookies 🍪
                 </h3>
                 <p className="mt-1 text-sm leading-relaxed text-lime-100/60">
-                  AttendEase uses cookies to keep you logged in, remember your
+                  manageteam uses cookies to keep you logged in, remember your
                   preferences, and understand how the app is used. You're in
                   control — pick what you're comfortable with.
                 </p>

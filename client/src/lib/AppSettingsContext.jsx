@@ -5,9 +5,9 @@ import { getToken } from '@/api/apiClient';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
 
 const DEFAULT_SETTINGS = {
-  app_name: 'AttendEase',
-  app_logo: '',
-  html_title: 'AttendEase',
+  app_name: 'manageteam',
+  app_logo: 'https://res.cloudinary.com/dwhtiuoes/image/upload/v1787044902/brand/manageteam-email-logo.png',
+  html_title: 'manageteam',
   favicon: '',
   primary_color: '#6366f1',
   auto_checkout_enabled: true,

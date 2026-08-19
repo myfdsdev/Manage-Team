@@ -14,7 +14,7 @@ export default function Welcome() {
   const loginInProgress = useRef(false);
   const { settings } = useAppSettings();
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
-  const appName = settings?.app_name || 'AttendEase';
+  const appName = settings?.app_name || 'manageteam';
 
   const {
     user,

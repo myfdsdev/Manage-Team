@@ -273,7 +273,7 @@ export const exportAttendanceReport = asyncHandler(async (req, res) => {
   // ========== EXCEL ==========
   if (format === 'excel') {
     const workbook = new ExcelJS.Workbook();
-    workbook.creator = 'OfficeFlow';
+    workbook.creator = 'manageteam';
     workbook.created = new Date();
 
     const sheet = workbook.addWorksheet('Summary');

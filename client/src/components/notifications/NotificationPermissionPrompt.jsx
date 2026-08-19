@@ -26,7 +26,7 @@ export default function NotificationPermissionPrompt() {
       
       if (result === 'granted') {
         // Show test notification
-        new Notification('AttendEase Notifications Enabled! 🎉', {
+        new Notification('manageteam Notifications Enabled! 🎉', {
           body: 'You will now receive desktop notifications for new messages.',
           icon: '/logo.png',
         });

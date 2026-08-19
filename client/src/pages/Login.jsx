@@ -99,7 +99,7 @@ export default function Login() {
               <Clock className="w-9 h-9 text-black" />
             )}
           </div>
-          <h1 className="text-3xl font-bold text-white">{settings?.app_name || 'AttendEase'}</h1>
+          <h1 className="text-3xl font-bold text-white">{settings?.app_name || 'manageteam'}</h1>
           <p className="text-lime-100/55 mt-1">Welcome back</p>
         </div>
 

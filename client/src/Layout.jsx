@@ -314,7 +314,7 @@ export default function Layout({ children, currentPageName }) {
                     <p className="truncate text-sm font-semibold text-white">
                       {company.name}
                     </p>
-                    <p className="truncate text-xs text-lime-100/40">AttendEase</p>
+                    <p className="truncate text-xs text-lime-100/40">manageteam</p>
                   </div>
                 </div>
               ) : (

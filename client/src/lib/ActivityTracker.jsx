@@ -16,7 +16,7 @@ import AutoCheckoutWarning from "@/components/AutoCheckoutWarning";
 // ---------------------------------------------------------------------------
 // We no longer watch mouse/keyboard activity — that incorrectly logged users
 // out when they were working in another app (Photoshop, VS Code, etc.) with
-// the AttendEase tab in the background.
+// the manageteam tab in the background.
 //
 // New rule: as long as the tab exists in the browser, send a heartbeat every
 // 30s. setInterval keeps firing in background tabs (browser-throttled, but

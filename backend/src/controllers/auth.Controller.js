@@ -589,12 +589,12 @@ export const sendPasswordResetForUser = asyncHandler(async (req, res) => {
   try {
     await sendEmail({
       to: user.email,
-      subject: 'Reset your AttendEase password',
+      subject: 'Reset your manageteam password',
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <h2>Password reset requested</h2>
           <p>Hi ${user.full_name || ''},</p>
-          <p>An administrator has initiated a password reset for your AttendEase account.</p>
+          <p>An administrator has initiated a password reset for your manageteam account.</p>
           <p><a href="${resetUrl}" style="display:inline-block;background:#6366f1;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;">Reset password</a></p>
           <p style="color:#666;font-size:14px;">This link expires in 1 hour. If you did not expect this, ignore this email.</p>
         </div>

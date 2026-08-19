@@ -343,14 +343,14 @@ export default function CompanySetup() {
         />
 
         {/* Top bar — matches the layout sketch:
-            [AttendEase logo] ........ [👑 Super Admin] [G email pill] [Logout] */}
+            [manageteam logo] ........ [👑 Super Admin] [G email pill] [Logout] */}
         <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-5">
           <div className="flex items-center gap-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-lime-400/30 bg-lime-400/10">
               <Sparkles className="h-4 w-4 text-lime-300" />
             </div>
             <span className="text-sm font-semibold tracking-wide text-white">
-              AttendEase
+              manageteam
             </span>
           </div>
 
