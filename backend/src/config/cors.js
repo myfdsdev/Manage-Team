@@ -7,6 +7,7 @@ const normalizeOrigin = (value = "") =>
 
 const rawAllowedOrigins = [
   ...(process.env.FRONTEND_URL || "").split(","),
+  "https://manageteam.xyz",
   "https://attendease-6v4v.onrender.com",
   "https://saas-app-repo.onrender.com",
   "http://localhost:5173",

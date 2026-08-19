@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 
-const MAIN_DOMAIN = import.meta.env.VITE_MAIN_DOMAIN || "yourapp.com";
+const MAIN_DOMAIN = import.meta.env.VITE_MAIN_DOMAIN || "manageteam.xyz";
 
 const copy = (text) => {
   navigator.clipboard.writeText(String(text));
