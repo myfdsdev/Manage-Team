@@ -219,37 +219,57 @@ export const joinMember = asyncHandler(async (req, res) => {
   const company = await Company.findById(invite.company_id);
   if (!company) return res.status(404).json({ error: "Workspace not found" });
 
-  const existing = await User.findOne({ email });
-  if (existing) {
-    return res.status(200).json({
-      existing: true,
-      message: "You already have an account. Please log in to accept this invitation.",
-    });
+  // Find or verify the account. A brand-new email creates an account; an
+  // existing email must prove ownership with its password before we join it
+  // (so an invite link can't hijack someone's account). Google accounts have
+  // no password, so those are sent to normal login.
+  let user = await User.findOne({ email }).select("+password");
+  let isNewUser = false;
+
+  if (user) {
+    if (user.auth_provider === "google" || !user.password) {
+      return res.status(200).json({
+        existing: true,
+        message: "You already have an account. Please log in to accept this invitation.",
+      });
+    }
+    const match = await user.comparePassword(password);
+    if (!match) {
+      return res.status(400).json({
+        error: "This email already has an account — enter its password to join.",
+      });
+    }
+  } else {
+    user = new User({ email, full_name: name, password, auth_provider: "local" });
+    isNewUser = true;
   }
 
-  const employeeId = await getNextEmployeeId(company._id);
-  const user = await User.create({
-    email,
-    full_name: name,
-    password,
-    auth_provider: "local",
-    role: "user",
-    has_app_access: true,
+  // Assign the user to the invited workspace (reusing an old employee id if
+  // they were a member here before).
+  const existingMembership = (user.workspaces || []).find(
+    (w) => String(w.company_id) === String(company._id),
+  );
+  const employeeId =
+    existingMembership?.employee_id || (await getNextEmployeeId(company._id));
+
+  user.company_id = company._id;
+  if (user.role !== "super_admin") user.role = "user";
+  user.employee_id = employeeId;
+  user.joined_company_at = new Date();
+  user.has_app_access = true;
+  user.is_online = true;
+  user.last_active = new Date();
+  user.workspaces = (user.workspaces || []).filter(
+    (w) => String(w.company_id) !== String(company._id),
+  );
+  user.workspaces.push({
     company_id: company._id,
-    employee_id: employeeId,
-    joined_company_at: new Date(),
-    is_online: true,
-    last_active: new Date(),
-    workspaces: [
-      {
-        company_id: company._id,
-        employee_id: employeeId || "",
-        role: "user",
-        joined_at: new Date(),
-        last_used_at: new Date(),
-      },
-    ],
+    employee_id: employeeId || "",
+    role: "user",
+    joined_at: existingMembership?.joined_at || new Date(),
+    last_used_at: new Date(),
   });
+  await user.save();
 
   invite.status = "accepted";
   await invite.save();
@@ -264,13 +284,17 @@ export const joinMember = asyncHandler(async (req, res) => {
     maxAge: 30 * 24 * 60 * 60 * 1000,
   });
 
-  console.log(`👥 join-member: ${user.email} joined ${company.name}`);
-  sendWelcomeEmail(user.email, user.full_name).catch((err) =>
-    console.error("Welcome email failed:", err.message),
+  console.log(
+    `👥 join-member: ${user.email} joined ${company.name} (${isNewUser ? "new" : "existing"})`,
   );
+  if (isNewUser) {
+    sendWelcomeEmail(user.email, user.full_name).catch((err) =>
+      console.error("Welcome email failed:", err.message),
+    );
+  }
 
   const populated = await User.findById(user._id).select("-password").populate("company_id");
-  res.status(201).json({
+  res.status(isNewUser ? 201 : 200).json({
     message: "Joined workspace",
     token: accessToken,
     user: buildUserResponse(populated),
