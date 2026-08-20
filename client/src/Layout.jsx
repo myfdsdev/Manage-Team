@@ -32,7 +32,6 @@ import {
   MessageSquarePlus,
   ShieldCheck,
   MessageCircleMore,
-  Globe,
   Crown,
   ArrowLeft,
 } from "lucide-react";
@@ -66,7 +65,6 @@ const adminNavItems = [
   { name: "Attendance Reports", page: "AttendanceReports", icon: BarChart3 },
   { name: "Salary Management", page: "SalaryManagement", icon: DollarSign },
   { name: "Company Settings", page: "CompanySettings", icon: Settings },
-  { name: "Domain Settings", page: "DomainSettings", icon: Globe },
   { name: "My Dashboard", page: "Dashboard", icon: Users },
   { name: "Attendance History", page: "AttendanceHistory", icon: Clock },
   { name: "My Stats", page: "MyStats", icon: BarChart3 },
