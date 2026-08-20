@@ -200,6 +200,10 @@ const getAnalyticsForUser = async (user) => {
     ),
   );
 
+  const heatmapCutoff = new Date(Date.now() - 366 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
+
   return {
     user: {
       id: user._id,
@@ -238,12 +242,16 @@ const getAnalyticsForUser = async (user) => {
         totalHours: Number(item.totalHours.toFixed(1)),
       })),
       monthlyTrend,
-      heatmap: last30Records.map((record) => ({
-        date: record.date,
-        status: record.status,
-        hours: Number(getHours(record).toFixed(1)),
-        intensity: Math.min(4, Math.ceil(getHours(record) / 2)),
-      })),
+      // GitHub-style contribution heatmap: one year of daily activity. The
+      // frontend fills in the empty days; we just send the recorded ones.
+      heatmap: allRecords
+        .filter((record) => record.date >= heatmapCutoff)
+        .map((record) => ({
+          date: record.date,
+          status: record.status,
+          hours: Number(getHours(record).toFixed(1)),
+          intensity: Math.min(4, Math.ceil(getHours(record) / 2)),
+        })),
     },
     insights: {
       weeklyDifference,

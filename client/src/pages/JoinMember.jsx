@@ -9,6 +9,23 @@ import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+// Defined at module scope (NOT inside the component) so it keeps a stable
+// identity across re-renders. If it lived inside JoinMember, every keystroke
+// would create a new component type and React would remount the whole subtree —
+// dropping input focus and replaying the entrance animation.
+const Shell = ({ children }) => (
+  <div className="relative min-h-screen overflow-hidden bg-black text-white">
+    <motion.div
+      className="pointer-events-none absolute -top-40 -left-40 h-[36rem] w-[36rem] rounded-full bg-lime-400/10 blur-3xl"
+      animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
+      transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+    />
+    <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-10">
+      {children}
+    </div>
+  </div>
+);
+
 export default function JoinMember() {
   const navigate = useNavigate();
   const { joinMember } = useAuth();
@@ -71,19 +88,6 @@ export default function JoinMember() {
       setSubmitting(false);
     }
   };
-
-  const Shell = ({ children }) => (
-    <div className="relative min-h-screen overflow-hidden bg-black text-white">
-      <motion.div
-        className="pointer-events-none absolute -top-40 -left-40 h-[36rem] w-[36rem] rounded-full bg-lime-400/10 blur-3xl"
-        animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
-        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-10">
-        {children}
-      </div>
-    </div>
-  );
 
   if (loading) {
     return (
