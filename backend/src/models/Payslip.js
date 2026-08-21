@@ -52,12 +52,11 @@ payslipSchema.index({ company_id: 1, user_id: 1, month: 1 }, { unique: true });
 payslipSchema.index({ company_id: 1, month: 1, status: 1 });
 payslipSchema.index({ company_id: 1, employee_email: 1, month: 1 });
 
-payslipSchema.pre('save', function (next) {
+payslipSchema.pre('save', function () {
   this.net_salary =
     Number(this.base_salary || 0) +
     Number(this.bonus || 0) -
     Number(this.deductions || 0);
-  next();
 });
 
 export default mongoose.model('Payslip', payslipSchema);

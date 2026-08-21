@@ -113,7 +113,7 @@ export default function SalaryManagement() {
       setEditing(null);
     },
     onError: (err) =>
-      toast.error(err?.response?.data?.error || err?.message || "Failed to save"),
+      toast.error(err?.error || err?.message || "Failed to save"),
   });
 
   const send = useMutation({
@@ -123,7 +123,7 @@ export default function SalaryManagement() {
       queryClient.invalidateQueries({ queryKey: ["salaryEmployees", month] });
     },
     onError: (err) =>
-      toast.error(err?.response?.data?.error || err?.message || "Failed to send"),
+      toast.error(err?.error || err?.message || "Failed to send"),
   });
 
   const remove = useMutation({
@@ -133,7 +133,7 @@ export default function SalaryManagement() {
       queryClient.invalidateQueries({ queryKey: ["salaryEmployees", month] });
     },
     onError: (err) =>
-      toast.error(err?.response?.data?.error || err?.message || "Failed to delete"),
+      toast.error(err?.error || err?.message || "Failed to delete"),
   });
 
   return (
