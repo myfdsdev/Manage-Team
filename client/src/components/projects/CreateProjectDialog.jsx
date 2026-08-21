@@ -21,9 +21,15 @@ const columnOptions = [
 ];
 
 const colors = [
-  '#6366f1', '#8b5cf6', '#ec4899', '#f59e0b', 
+  '#6366f1', '#8b5cf6', '#ec4899', '#f59e0b',
   '#10b981', '#3b82f6', '#ef4444', '#06b6d4'
 ];
+
+const dialogClass = "bg-[#020806] border border-lime-400/20 text-white";
+const labelClass = "text-white/80";
+const inputClass = "mt-2 border-lime-400/15 bg-black text-white placeholder:text-white/30";
+const checkboxClass =
+  "border-lime-400/30 data-[state=checked]:bg-lime-400 data-[state=checked]:text-black data-[state=checked]:border-lime-400";
 
 export default function CreateProjectDialog({ open, onClose, currentUser }) {
   const [formData, setFormData] = useState({
@@ -76,7 +82,7 @@ export default function CreateProjectDialog({ open, onClose, currentUser }) {
     onSuccess: (project) => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
       queryClient.invalidateQueries({ queryKey: ['project-members'] });
-      
+
       // Navigate to project board with Add Task dialog open
       navigate(createPageUrl('ProjectBoard') + `?projectId=${project.id}&openAddTask=true`);
       onClose();
@@ -129,7 +135,7 @@ export default function CreateProjectDialog({ open, onClose, currentUser }) {
     setMemberSearch('');
   };
 
-  const filteredUsers = allUsers.filter(user => 
+  const filteredUsers = allUsers.filter(user =>
     user.full_name?.toLowerCase().includes(memberSearch.toLowerCase()) ||
     user.email?.toLowerCase().includes(memberSearch.toLowerCase())
   );
@@ -137,42 +143,43 @@ export default function CreateProjectDialog({ open, onClose, currentUser }) {
   return (
     <>
       <Dialog open={open} onOpenChange={onClose}>
-        <DialogContent className="max-w-2xl">
+        <DialogContent className={`max-w-2xl ${dialogClass}`}>
           <DialogHeader>
-            <DialogTitle>Create New Project</DialogTitle>
+            <DialogTitle className="text-white">Create New Project</DialogTitle>
           </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-6" noValidate>
           <div>
-            <Label>Project Name *</Label>
+            <Label className={labelClass}>Project Name *</Label>
             <Input
               value={formData.project_name}
               onChange={(e) => setFormData({ ...formData, project_name: e.target.value })}
               placeholder="Enter project name"
+              className={inputClass}
             />
           </div>
 
           <div>
-            <Label>Add Members</Label>
+            <Label className={labelClass}>Add Members</Label>
             <button
               type="button"
               onClick={handleOpenMemberPopup}
-              className="mt-2 w-full border rounded-lg p-3 bg-white text-left hover:bg-gray-50 transition-colors min-h-[60px] flex flex-wrap gap-2 items-center"
+              className="mt-2 w-full border border-lime-400/15 rounded-lg p-3 bg-black text-left hover:bg-lime-400/[0.04] transition-colors min-h-[60px] flex flex-wrap gap-2 items-center"
             >
               {selectedMembers.length === 0 ? (
-                <span className="text-gray-400 text-sm">Click to add members...</span>
+                <span className="text-white/40 text-sm">Click to add members...</span>
               ) : (
                 selectedMembers.map(member => (
-                  <div 
-                    key={member.id} 
-                    className="flex items-center gap-1 bg-indigo-100 text-indigo-800 px-3 py-1 rounded-full text-sm"
+                  <div
+                    key={member.id}
+                    className="flex items-center gap-1 bg-lime-400/10 text-lime-300 border border-lime-400/20 px-3 py-1 rounded-full text-sm"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleRemoveMember(member.id);
                     }}
                   >
                     <span>{member.full_name}</span>
-                    <X className="w-3 h-3 cursor-pointer hover:text-indigo-900" />
+                    <X className="w-3 h-3 cursor-pointer hover:text-lime-100" />
                   </div>
                 ))
               )}
@@ -180,7 +187,7 @@ export default function CreateProjectDialog({ open, onClose, currentUser }) {
           </div>
 
           <div>
-            <Label>Project Color</Label>
+            <Label className={labelClass}>Project Color</Label>
             <div className="flex gap-2 mt-2">
               {colors.map((color) => (
                 <button
@@ -188,7 +195,7 @@ export default function CreateProjectDialog({ open, onClose, currentUser }) {
                   type="button"
                   onClick={() => setFormData({ ...formData, color })}
                   className={`w-8 h-8 rounded-lg transition-all ${
-                    formData.color === color ? 'ring-2 ring-offset-2 ring-gray-400' : ''
+                    formData.color === color ? 'ring-2 ring-offset-2 ring-lime-400 ring-offset-[#020806]' : ''
                   }`}
                   style={{ backgroundColor: color }}
                 />
@@ -197,17 +204,18 @@ export default function CreateProjectDialog({ open, onClose, currentUser }) {
           </div>
 
           <div>
-            <Label className="mb-3 block">Select Columns</Label>
+            <Label className={`mb-3 block ${labelClass}`}>Select Columns</Label>
             <div className="grid grid-cols-2 gap-4">
               {columnOptions.map((option) => (
-                <div key={option.id} className="flex items-start gap-3 p-3 rounded-lg border border-gray-200">
+                <div key={option.id} className="flex items-start gap-3 p-3 rounded-lg border border-lime-400/15 bg-black/40">
                   <Checkbox
                     checked={formData.enabled_columns.includes(option.id)}
                     onCheckedChange={() => toggleColumn(option.id)}
+                    className={checkboxClass}
                   />
                   <div>
-                    <div className="font-medium text-sm">{option.label}</div>
-                    <div className="text-xs text-gray-500">{option.description}</div>
+                    <div className="font-medium text-sm text-white">{option.label}</div>
+                    <div className="text-xs text-white/50">{option.description}</div>
                   </div>
                 </div>
               ))}
@@ -215,10 +223,19 @@ export default function CreateProjectDialog({ open, onClose, currentUser }) {
           </div>
 
           <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="border-lime-400/20 bg-transparent text-white hover:bg-lime-400/10 hover:text-white"
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={createProjectMutation.isPending}>
+            <Button
+              type="submit"
+              disabled={createProjectMutation.isPending}
+              className="bg-lime-400 text-black hover:bg-lime-300"
+            >
               {createProjectMutation.isPending ? 'Creating...' : 'Next'}
             </Button>
           </div>
@@ -228,9 +245,9 @@ export default function CreateProjectDialog({ open, onClose, currentUser }) {
 
     {/* Member Selection Popup */}
     <Dialog open={memberPopupOpen} onOpenChange={setMemberPopupOpen}>
-      <DialogContent className="max-w-lg max-h-[80vh] flex flex-col">
+      <DialogContent className={`max-w-lg max-h-[80vh] flex flex-col ${dialogClass}`}>
         <DialogHeader>
-          <DialogTitle>Add Members</DialogTitle>
+          <DialogTitle className="text-white">Add Members</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4 flex-1 flex flex-col overflow-hidden">
@@ -239,15 +256,15 @@ export default function CreateProjectDialog({ open, onClose, currentUser }) {
             value={memberSearch}
             onChange={(e) => setMemberSearch(e.target.value)}
             placeholder="Search members..."
-            className="w-full"
+            className="w-full border-lime-400/15 bg-black text-white placeholder:text-white/30"
           />
 
           {/* Members List */}
-          <div className="flex-1 overflow-y-auto border rounded-lg">
+          <div className="flex-1 overflow-y-auto border border-lime-400/15 rounded-lg">
             {filteredUsers.length === 0 ? (
-              <div className="p-4 text-center text-gray-500">No members found</div>
+              <div className="p-4 text-center text-white/50">No members found</div>
             ) : (
-              <div className="divide-y">
+              <div className="divide-y divide-lime-400/10">
                 {filteredUsers.map(user => {
                   const isSelected = !!tempSelectedMembers.find(m => m.id === user.id);
                   return (
@@ -255,14 +272,14 @@ export default function CreateProjectDialog({ open, onClose, currentUser }) {
                       key={user.id}
                       type="button"
                       onClick={() => handleToggleMember(user)}
-                      className={`w-full p-3 hover:bg-gray-50 flex items-center gap-3 text-left transition-colors ${isSelected ? 'bg-indigo-50 border-l-4 border-indigo-600' : ''}`}
+                      className={`w-full p-3 hover:bg-lime-400/[0.04] flex items-center gap-3 text-left transition-colors ${isSelected ? 'bg-lime-400/10 border-l-4 border-lime-400' : ''}`}
                     >
-                      <div className="w-10 h-10 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-medium text-sm shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-lime-400/15 text-lime-300 flex items-center justify-center font-medium text-sm shrink-0">
                         {user.full_name?.split(' ').map(n => n[0]).join('').slice(0, 2)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-medium text-sm">{user.full_name}</div>
-                        <div className="text-xs text-gray-500 truncate">{user.email}</div>
+                        <div className="font-medium text-sm text-white">{user.full_name}</div>
+                        <div className="text-xs text-white/50 truncate">{user.email}</div>
                       </div>
                     </button>
                   );
@@ -272,7 +289,7 @@ export default function CreateProjectDialog({ open, onClose, currentUser }) {
           </div>
 
           {/* Actions */}
-          <div className="flex justify-end gap-3 pt-4 border-t">
+          <div className="flex justify-end gap-3 pt-4 border-t border-lime-400/10">
             <Button
               type="button"
               variant="outline"
@@ -280,12 +297,14 @@ export default function CreateProjectDialog({ open, onClose, currentUser }) {
                 setMemberPopupOpen(false);
                 setMemberSearch('');
               }}
+              className="border-lime-400/20 bg-transparent text-white hover:bg-lime-400/10 hover:text-white"
             >
               Cancel
             </Button>
             <Button
               type="button"
               onClick={handleSaveMembers}
+              className="bg-lime-400 text-black hover:bg-lime-300"
             >
               Done ({tempSelectedMembers.length})
             </Button>
