@@ -29,7 +29,6 @@ import {
   BarChart3,
   Trophy,
   DollarSign,
-  MessageSquarePlus,
   ShieldCheck,
   MessageCircleMore,
   Crown,
@@ -56,7 +55,6 @@ const employeeNavItems = [
   { name: "Projects", page: "Projects", icon: LayoutDashboard },
   { name: "Groups", page: "Groups", icon: Users },
   { name: "Direct Messages", page: "DirectMessages", icon: MessageCircleMore },
-  { name: "Feedback", page: "Feedback", icon: MessageSquarePlus },
   { name: "My Profile", page: "MyProfile", icon: UserCircle },
 ];
 
@@ -73,7 +71,6 @@ const adminNavItems = [
   { name: "Projects", page: "Projects", icon: LayoutDashboard },
   { name: "Groups", page: "Groups", icon: Users },
   { name: "Direct Messages", page: "DirectMessages", icon: Users },
-  { name: "Feedback", page: "Feedback", icon: MessageSquarePlus },
   { name: "My Profile", page: "MyProfile", icon: UserCircle },
 ];
 
