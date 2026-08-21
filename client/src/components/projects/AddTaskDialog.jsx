@@ -37,27 +37,37 @@ export default function AddTaskDialog({ open, onClose, project, members }) {
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="bg-[#020806] border border-lime-400/20 text-white">
         <DialogHeader>
-          <DialogTitle>Add New Task</DialogTitle>
+          <DialogTitle className="text-white">Add New Task</DialogTitle>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4" noValidate>
           <div>
-            <Label>Task Name *</Label>
+            <Label className="text-white/80">Task Name *</Label>
             <Input
               value={taskName}
               onChange={(e) => setTaskName(e.target.value)}
               placeholder="Enter task name"
               autoFocus
+              className="mt-2 border-lime-400/15 bg-black text-white placeholder:text-white/30"
             />
           </div>
 
           <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={onClose}
+              className="border-lime-400/20 bg-transparent text-white hover:bg-lime-400/10 hover:text-white"
+            >
               Cancel
             </Button>
-            <Button type="submit" disabled={createTaskMutation.isPending}>
+            <Button
+              type="submit"
+              disabled={createTaskMutation.isPending}
+              className="bg-lime-400 text-black hover:bg-lime-300"
+            >
               {createTaskMutation.isPending ? 'Adding...' : 'Add Task'}
             </Button>
           </div>

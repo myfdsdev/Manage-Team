@@ -12,6 +12,9 @@ import ManageMembersDialog from '../components/projects/ManageMembersDialog';
 // Safe default columns if project doesn't have them set
 const DEFAULT_COLUMNS = ['owner', 'status', 'due_date', 'priority', 'notes'];
 
+const outlineBtn =
+  "border-lime-400/20 bg-transparent text-white hover:bg-lime-400/10 hover:text-white";
+
 export default function ProjectBoardPage() {
   const [user, setUser] = useState(null);
   const [project, setProject] = useState(null);
@@ -92,8 +95,8 @@ export default function ProjectBoardPage() {
   // Loading state
   if (!user || isProjectLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600" />
+      <div className="flex items-center justify-center min-h-screen bg-black">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-lime-400" />
       </div>
     );
   }
@@ -101,13 +104,13 @@ export default function ProjectBoardPage() {
   // Project not found / no access
   if (!project) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-black">
         <div className="text-center">
-          <p className="text-red-600 text-lg mb-4">
+          <p className="text-rose-400 text-lg mb-4">
             Project not found or you don't have access
           </p>
           <Link to={createPageUrl('Projects')}>
-            <Button variant="outline">Back to Projects</Button>
+            <Button variant="outline" className={outlineBtn}>Back to Projects</Button>
           </Link>
         </div>
       </div>
@@ -149,13 +152,13 @@ export default function ProjectBoardPage() {
 
   if (!hasAccess) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen bg-black">
         <div className="text-center">
-          <p className="text-red-600 text-lg mb-4">
+          <p className="text-rose-400 text-lg mb-4">
             You don't have access to this project
           </p>
           <Link to={createPageUrl('Projects')}>
-            <Button variant="outline">Back to Projects</Button>
+            <Button variant="outline" className={outlineBtn}>Back to Projects</Button>
           </Link>
         </div>
       </div>
@@ -163,14 +166,14 @@ export default function ProjectBoardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-black text-white">
       {/* Header */}
-      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+      <div className="bg-[#020806] border-b border-lime-400/15 sticky top-0 z-10">
         <div className="w-full px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link to={createPageUrl('Projects')}>
-                <Button variant="ghost" size="icon">
+                <Button variant="ghost" size="icon" className="text-white/70 hover:bg-lime-400/10 hover:text-lime-300">
                   <ArrowLeft className="w-5 h-5" />
                 </Button>
               </Link>
@@ -181,11 +184,11 @@ export default function ProjectBoardPage() {
                 />
                 <div className="flex-1">
                   <div className="flex items-center gap-4">
-                    <h1 className="text-2xl font-bold text-gray-900">
+                    <h1 className="text-2xl font-bold text-white">
                       {project.project_name}
                     </h1>
                     <div className="flex items-center gap-3">
-                      <div className="w-48 bg-gray-200 rounded-full h-2.5">
+                      <div className="w-48 bg-white/10 rounded-full h-2.5">
                         <div
                           className="h-2.5 rounded-full transition-all duration-300"
                           style={{
@@ -194,13 +197,13 @@ export default function ProjectBoardPage() {
                           }}
                         />
                       </div>
-                      <span className="text-sm font-semibold text-gray-700">
+                      <span className="text-sm font-semibold text-white/70">
                         {projectProgress}%
                       </span>
                     </div>
                   </div>
                   {project.description && (
-                    <p className="text-sm text-gray-600 mt-1">
+                    <p className="text-sm text-white/60 mt-1">
                       {project.description}
                     </p>
                   )}
@@ -212,6 +215,7 @@ export default function ProjectBoardPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowMembers(true)}
+                className={outlineBtn}
               >
                 <Users className="w-4 h-4 mr-2" />
                 {members.length} Members
@@ -220,7 +224,7 @@ export default function ProjectBoardPage() {
                 <Button
                   onClick={() => setShowAddTask(true)}
                   size="sm"
-                  className="bg-indigo-600 hover:bg-indigo-700"
+                  className="bg-lime-400 text-black hover:bg-lime-300"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   Add Task
@@ -233,10 +237,10 @@ export default function ProjectBoardPage() {
 
       {/* Task Table */}
       <div className="w-full px-6 py-6">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-[#020806] rounded-xl shadow-sm border border-lime-400/15 overflow-hidden">
           {/* Table Header */}
           <div
-            className="bg-gradient-to-r from-gray-50 to-gray-100 border-b border-gray-200 px-6 py-3.5 grid gap-3 items-center"
+            className="bg-black/40 border-b border-lime-400/15 px-6 py-3.5 grid gap-3 items-center"
             style={{
               gridTemplateColumns: `220px ${enabledColumns
                 .map((col) => {
@@ -251,36 +255,36 @@ export default function ProjectBoardPage() {
                 .join(' ')} 60px`,
             }}
           >
-            <div className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+            <div className="text-xs font-bold text-white/50 uppercase tracking-wider">
               Task
             </div>
             {enabledColumns.includes('owner') && (
-              <div className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <div className="text-xs font-bold text-white/50 uppercase tracking-wider">
                 Owner
               </div>
             )}
             {enabledColumns.includes('status') && (
-              <div className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <div className="text-xs font-bold text-white/50 uppercase tracking-wider">
                 Status
               </div>
             )}
             {enabledColumns.includes('due_date') && (
-              <div className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <div className="text-xs font-bold text-white/50 uppercase tracking-wider">
                 Due Date
               </div>
             )}
             {enabledColumns.includes('priority') && (
-              <div className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <div className="text-xs font-bold text-white/50 uppercase tracking-wider">
                 Priority
               </div>
             )}
             {enabledColumns.includes('files') && (
-              <div className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <div className="text-xs font-bold text-white/50 uppercase tracking-wider">
                 Files
               </div>
             )}
             {enabledColumns.includes('notes') && (
-              <div className="text-xs font-bold text-gray-600 uppercase tracking-wider">
+              <div className="text-xs font-bold text-white/50 uppercase tracking-wider">
                 Notes
               </div>
             )}
@@ -290,7 +294,7 @@ export default function ProjectBoardPage() {
           {/* Task Rows */}
           <div>
             {tasks.length === 0 ? (
-              <div className="text-center py-12 text-gray-500">
+              <div className="text-center py-12 text-white/50">
                 No tasks yet. Click "Add Task" to get started.
               </div>
             ) : (

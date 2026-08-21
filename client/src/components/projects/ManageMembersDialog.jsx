@@ -53,27 +53,31 @@ export default function ManageMembersDialog({ open, onClose, project, members, i
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="max-w-md">
+      <DialogContent className="max-w-md bg-[#020806] border border-lime-400/20 text-white">
         <DialogHeader>
-          <DialogTitle>Project Members</DialogTitle>
+          <DialogTitle className="text-white">Project Members</DialogTitle>
         </DialogHeader>
 
         {/* Add Member */}
         {isAdmin && availableUsers.length > 0 && (
-          <div className="flex gap-2 pb-4 border-b">
+          <div className="flex gap-2 pb-4 border-b border-lime-400/15">
             <Select value={selectedUserId} onValueChange={setSelectedUserId}>
-              <SelectTrigger className="flex-1">
+              <SelectTrigger className="flex-1 border-lime-400/15 bg-black text-white">
                 <SelectValue placeholder="Select user to add..." />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-[#020806] border-lime-400/20 text-white">
                 {availableUsers.map((user) => (
-                  <SelectItem key={user.id} value={user.id}>
+                  <SelectItem key={user.id} value={user.id} className="focus:bg-lime-400/10 focus:text-lime-200">
                     {user.full_name} ({user.email})
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
-            <Button onClick={handleAddMember} disabled={!selectedUserId}>
+            <Button
+              onClick={handleAddMember}
+              disabled={!selectedUserId}
+              className="bg-lime-400 text-black hover:bg-lime-300"
+            >
               <UserPlus className="w-4 h-4" />
             </Button>
           </div>
@@ -82,22 +86,22 @@ export default function ManageMembersDialog({ open, onClose, project, members, i
         {/* Members List */}
         <div className="space-y-2 max-h-96 overflow-y-auto">
           {members.length === 0 ? (
-            <p className="text-center text-gray-500 py-4">No members yet</p>
+            <p className="text-center text-white/50 py-4">No members yet</p>
           ) : (
             members.map((member) => (
               <div
                 key={member.id}
-                className="flex items-center justify-between p-3 rounded-lg border border-gray-200 hover:bg-gray-50"
+                className="flex items-center justify-between p-3 rounded-lg border border-lime-400/15 hover:bg-lime-400/[0.04]"
               >
                 <div className="flex items-center gap-3">
                   <Avatar className="w-10 h-10">
-                    <AvatarFallback className="bg-indigo-100 text-indigo-600">
+                    <AvatarFallback className="bg-lime-400/15 text-lime-300">
                       {member.user_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-medium text-sm">{member.user_name}</p>
-                    <p className="text-xs text-gray-500">{member.user_email}</p>
+                    <p className="font-medium text-sm text-white">{member.user_name}</p>
+                    <p className="text-xs text-white/50">{member.user_email}</p>
                   </div>
                 </div>
                 {isAdmin && (
@@ -105,7 +109,7 @@ export default function ManageMembersDialog({ open, onClose, project, members, i
                     variant="ghost"
                     size="icon"
                     onClick={() => removeMemberMutation.mutate(member.id)}
-                    className="text-red-600 hover:text-red-700"
+                    className="text-rose-400 hover:text-rose-300 hover:bg-rose-500/10"
                   >
                     <X className="w-4 h-4" />
                   </Button>

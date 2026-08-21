@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { Trash2, FileText, Calendar, Upload } from "lucide-react";
+import { Trash2, FileText, Upload } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { format } from "date-fns";
 import { base44 } from '@/api/base44Client';
 import FilesDialog from './FilesDialog';
 import NotesPopup from './NotesPopup';
@@ -24,6 +22,10 @@ const priorityConfig = {
   high: { label: 'High', color: 'bg-orange-100 text-orange-800' },
   critical: { label: 'Critical', color: 'bg-red-100 text-red-800' },
 };
+
+const triggerClass = "h-9 border-lime-400/15 bg-black text-white";
+const contentClass = "bg-[#020806] border-lime-400/20 text-white";
+const avatarClass = "text-xs bg-lime-400/15 text-lime-300";
 
 export default function TaskRow({ task, project, members, isAdmin, currentUserId, onUpdate, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -74,8 +76,8 @@ export default function TaskRow({ task, project, members, isAdmin, currentUserId
   };
 
   return (
-    <div 
-      className="border-b border-gray-100 px-6 py-3.5 hover:bg-indigo-50/30 transition-all duration-200 grid gap-3 items-center group"
+    <div
+      className="border-b border-lime-400/10 px-6 py-3.5 hover:bg-lime-400/[0.03] transition-all duration-200 grid gap-3 items-center group"
       style={{
         gridTemplateColumns: `220px ${project.enabled_columns.map(col => {
           if (col === 'owner') return '180px';
@@ -97,12 +99,12 @@ export default function TaskRow({ task, project, members, isAdmin, currentUserId
             onBlur={handleSaveName}
             onKeyDown={(e) => e.key === 'Enter' && handleSaveName()}
             autoFocus
-            className="h-9 text-sm font-medium"
+            className="h-9 text-sm font-medium border-lime-400/15 bg-black text-white"
           />
         ) : (
-          <div 
+          <div
             onClick={() => canEdit && setIsEditing(true)}
-            className={`font-semibold text-sm text-gray-800 ${canEdit ? 'cursor-pointer hover:text-indigo-600 transition-colors' : ''}`}
+            className={`font-semibold text-sm text-white ${canEdit ? 'cursor-pointer hover:text-lime-300 transition-colors' : ''}`}
           >
             {task.task_name}
           </div>
@@ -120,12 +122,12 @@ export default function TaskRow({ task, project, members, isAdmin, currentUserId
             }}
             disabled={!canEdit}
           >
-            <SelectTrigger className="h-9">
+            <SelectTrigger className={triggerClass}>
               <SelectValue placeholder="Assign...">
                 {task.owner_name && (
                   <div className="flex items-center gap-2">
                     <Avatar className="w-6 h-6">
-                      <AvatarFallback className="text-xs bg-indigo-100 text-indigo-600">
+                      <AvatarFallback className={avatarClass}>
                         {task.owner_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                       </AvatarFallback>
                     </Avatar>
@@ -134,12 +136,12 @@ export default function TaskRow({ task, project, members, isAdmin, currentUserId
                 )}
               </SelectValue>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className={contentClass}>
               {members.map((member) => (
-                <SelectItem key={member.user_id} value={member.user_id}>
+                <SelectItem key={member.user_id} value={member.user_id} className="focus:bg-lime-400/10 focus:text-lime-200">
                   <div className="flex items-center gap-2">
                     <Avatar className="w-6 h-6">
-                      <AvatarFallback className="text-xs bg-indigo-100 text-indigo-600">
+                      <AvatarFallback className={avatarClass}>
                         {member.user_name.split(' ').map(n => n[0]).join('').slice(0, 2)}
                       </AvatarFallback>
                     </Avatar>
@@ -160,16 +162,16 @@ export default function TaskRow({ task, project, members, isAdmin, currentUserId
             onValueChange={(value) => onUpdate({ status: value })}
             disabled={!canEdit}
           >
-            <SelectTrigger className="h-9">
+            <SelectTrigger className={triggerClass}>
               <SelectValue>
                 <Badge className={statusConfig[task.status].color}>
                   {statusConfig[task.status].label}
                 </Badge>
               </SelectValue>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className={contentClass}>
               {Object.entries(statusConfig).map(([key, config]) => (
-                <SelectItem key={key} value={key}>
+                <SelectItem key={key} value={key} className="focus:bg-lime-400/10">
                   <Badge className={config.color}>{config.label}</Badge>
                 </SelectItem>
               ))}
@@ -186,7 +188,7 @@ export default function TaskRow({ task, project, members, isAdmin, currentUserId
             value={task.due_date || ''}
             onChange={(e) => onUpdate({ due_date: e.target.value })}
             disabled={!canEdit}
-            className="h-9"
+            className="h-9 border-lime-400/15 bg-black text-white [color-scheme:dark]"
           />
         </div>
       )}
@@ -199,16 +201,16 @@ export default function TaskRow({ task, project, members, isAdmin, currentUserId
             onValueChange={(value) => onUpdate({ priority: value })}
             disabled={!canEdit}
           >
-            <SelectTrigger className="h-9">
+            <SelectTrigger className={triggerClass}>
               <SelectValue>
                 <Badge className={priorityConfig[task.priority].color}>
                   {priorityConfig[task.priority].label}
                 </Badge>
               </SelectValue>
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className={contentClass}>
               {Object.entries(priorityConfig).map(([key, config]) => (
-                <SelectItem key={key} value={key}>
+                <SelectItem key={key} value={key} className="focus:bg-lime-400/10">
                   <Badge className={config.color}>{config.label}</Badge>
                 </SelectItem>
               ))}
@@ -220,18 +222,19 @@ export default function TaskRow({ task, project, members, isAdmin, currentUserId
       {/* Files */}
       {project.enabled_columns.includes('files') && (
         <div className="flex items-center gap-2">
-          <Button 
-            variant="outline" 
-            size="sm" 
+          <Button
+            variant="outline"
+            size="sm"
             onClick={() => setShowFilesDialog(true)}
             disabled={!task.files || task.files.length === 0}
+            className="border-lime-400/20 bg-transparent text-white hover:bg-lime-400/10 hover:text-white"
           >
             <FileText className="w-4 h-4 mr-1" />
             {task.files?.length || 0}
           </Button>
           {canEdit && (
             <label className="cursor-pointer">
-              <Button variant="ghost" size="icon" asChild disabled={uploading}>
+              <Button variant="ghost" size="icon" asChild disabled={uploading} className="text-white/70 hover:bg-lime-400/10 hover:text-lime-300">
                 <span>
                   <Upload className="w-4 h-4" />
                 </span>
@@ -251,10 +254,10 @@ export default function TaskRow({ task, project, members, isAdmin, currentUserId
       {project.enabled_columns.includes('notes') && (
         <div
           onClick={handleNotesClick}
-          className={`${canEdit ? 'cursor-pointer hover:bg-white hover:shadow-sm' : ''} rounded-lg px-3 py-2 transition-all duration-200 border border-transparent ${canEdit ? 'hover:border-indigo-200' : ''}`}
+          className={`${canEdit ? 'cursor-pointer hover:bg-lime-400/[0.06]' : ''} rounded-lg px-3 py-2 transition-all duration-200 border border-transparent ${canEdit ? 'hover:border-lime-400/20' : ''}`}
         >
-          <div className="text-sm text-gray-700 whitespace-pre-wrap break-words min-h-[36px] flex items-center">
-            {task.notes ? task.notes : <span className="text-gray-400 italic text-xs">Click to add notes...</span>}
+          <div className="text-sm text-white/70 whitespace-pre-wrap break-words min-h-[36px] flex items-center">
+            {task.notes ? task.notes : <span className="text-white/40 italic text-xs">Click to add notes...</span>}
           </div>
         </div>
       )}
@@ -262,11 +265,11 @@ export default function TaskRow({ task, project, members, isAdmin, currentUserId
       {/* Actions */}
       <div>
         {isAdmin && (
-          <Button 
-            variant="ghost" 
-            size="icon" 
-            onClick={onDelete} 
-            className="text-red-500 hover:text-red-700 hover:bg-red-50 opacity-0 group-hover:opacity-100 transition-all"
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onDelete}
+            className="text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 opacity-0 group-hover:opacity-100 transition-all"
           >
             <Trash2 className="w-4 h-4" />
           </Button>
