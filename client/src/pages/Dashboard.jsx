@@ -319,11 +319,16 @@ export default function Dashboard() {
       const day = subDays(new Date(), 6 - index);
       const dateKey = format(day, 'yyyy-MM-dd');
       const entry = myAttendance.find((item) => item.date === dateKey);
-      const seconds = entry ? getSessionDurationSeconds(entry) : 0;
+      // Use the server-recorded work_hours (device-independent) rather than
+      // computing live from the viewer's clock. The old approach measured an
+      // open (not-checked-out) session as `new Date() - check_in`, so the same
+      // day's hours differed per device — the chart showed on one device and
+      // read as empty on another with a different clock/timezone.
+      const hours = entry ? Number(entry.work_hours ?? entry.total_work_hours ?? 0) : 0;
 
       return {
         day: format(day, 'EEE'),
-        hours: Number((seconds / 3600).toFixed(1)),
+        hours: Number((hours || 0).toFixed(1)),
       };
     });
   }, [myAttendance]);
