@@ -31,7 +31,51 @@ import { format } from "date-fns";
 import AchievementWall from "@/components/profile/AchievementWall";
 import RankBadge from "@/components/profile/RankBadge";
 
-const departments = ["Video Editor", "Graphic Designer", "Web Designer", "Content Writer", "Developer"];
+const departments = [
+  "Video Editor",
+  "Graphic Designer",
+  "Web Designer",
+  "UI/UX Designer",
+  "Product Designer",
+  "Motion Graphics Artist",
+  "Illustrator",
+  "Brand Designer",
+  "Videographer",
+  "Photographer",
+  "Animator",
+  "3D Artist",
+  "Content Writer",
+  "Copywriter",
+  "Content Strategist",
+  "SEO Specialist",
+  "Social Media Manager",
+  "Digital Marketer",
+  "Marketing Manager",
+  "Email Marketer",
+  "Community Manager",
+  "Developer",
+  "Frontend Developer",
+  "Backend Developer",
+  "Full Stack Developer",
+  "Mobile App Developer",
+  "DevOps Engineer",
+  "QA Engineer",
+  "Data Analyst",
+  "Data Scientist",
+  "IT Support",
+  "System Administrator",
+  "Product Manager",
+  "Project Manager",
+  "Business Analyst",
+  "Sales Executive",
+  "Account Manager",
+  "Customer Support",
+  "HR Manager",
+  "Recruiter",
+  "Accountant",
+  "Operations Manager",
+  "Administrator",
+];
 const MAX_FILE_SIZE_MB = 2;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
 
