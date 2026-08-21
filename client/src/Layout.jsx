@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { createPageUrl } from "@/utils";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import AppLogo from "@/components/AppLogo";
+import BrandLogo from "@/components/BrandLogo";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -298,22 +298,11 @@ export default function Layout({ children, currentPageName }) {
         >
           {!sidebarCollapsed && (
             <div className="min-w-0">
-              {company?.logo ? (
-                <div className="flex items-center gap-3">
-                  <img
-                    src={company.logo}
-                    alt={company.name || "Company"}
-                    className="h-10 w-10 rounded-lg object-contain"
-                  />
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-white">
-                      {company.name}
-                    </p>
-                    <p className="truncate text-xs text-lime-100/40">manageteam</p>
-                  </div>
-                </div>
-              ) : (
-                <AppLogo size="md" />
+              <BrandLogo className="h-10" />
+              {company?.name && (
+                <p className="mt-1.5 truncate text-xs text-lime-100/40">
+                  {company.name}
+                </p>
               )}
             </div>
           )}
@@ -439,20 +428,7 @@ export default function Layout({ children, currentPageName }) {
 
       <header className="lg:hidden fixed top-0 left-0 right-0 bg-[#020806]/90 backdrop-blur-md border-b border-lime-400/15 z-50">
         <div className="flex items-center justify-between px-4 py-3">
-          {company?.logo ? (
-            <div className="flex items-center gap-2">
-              <img
-                src={company.logo}
-                alt={company.name || "Company"}
-                className="h-8 w-8 rounded-md object-contain"
-              />
-              <span className="max-w-[150px] truncate text-sm font-semibold">
-                {company.name}
-              </span>
-            </div>
-          ) : (
-            <AppLogo size="sm" />
-          )}
+          <BrandLogo className="h-9" />
 
           <div className="flex items-center gap-2">
             {user && <NotificationBell userEmail={user.email} />}

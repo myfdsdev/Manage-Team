@@ -112,7 +112,7 @@ export default function Welcome() {
           className="relative z-10 max-w-xl"
         >
           <div className="mb-12">
-            <BrandLogo className="h-11" />
+            <BrandLogo className="h-16" />
           </div>
 
           <h1 className="text-4xl lg:text-5xl font-bold leading-tight mb-6">
@@ -142,7 +142,7 @@ export default function Welcome() {
           className="w-full max-w-sm"
         >
           <div className="lg:hidden flex justify-center mb-8">
-            <BrandLogo className="h-9" />
+            <BrandLogo className="h-12" />
           </div>
 
           <div className="text-center mb-8">
