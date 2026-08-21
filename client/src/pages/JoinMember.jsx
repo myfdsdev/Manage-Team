@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import { ArrowRight, Loader2, Lock, Mail, User, Users } from "lucide-react";
+import { ArrowRight, Loader2, Lock, Mail, User } from "lucide-react";
+import BrandLogo from "@/components/BrandLogo";
 
 import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
@@ -119,14 +120,8 @@ export default function JoinMember() {
 
   return (
     <Shell>
-      <div className="mb-8 flex items-center gap-2">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-lime-400/30 bg-lime-400/10">
-          <Users className="h-5 w-5 text-lime-300" />
-        </div>
-        <span className="text-lg font-extrabold tracking-tight">
-          <span className="text-white">manage</span>
-          <span className="text-lime-400">team</span>
-        </span>
+      <div className="mb-8">
+        <BrandLogo className="h-10" />
       </div>
 
       <motion.div

@@ -2,19 +2,17 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { GoogleLogin } from '@react-oauth/google';
 import { Button } from '@/components/ui/button';
-import { Mail, Building2, CheckCircle2, Clock, Users, BarChart3 } from 'lucide-react';
+import { Mail, CheckCircle2, Clock, Users, BarChart3 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import { createPageUrl } from '@/utils';
 import { useAuth } from '@/lib/AuthContext';
-import { useAppSettings } from '@/lib/AppSettingsContext';
+import BrandLogo from '@/components/BrandLogo';
 
 export default function Welcome() {
   const navigate = useNavigate();
   const loginInProgress = useRef(false);
-  const { settings } = useAppSettings();
   const [pointer, setPointer] = useState({ x: 0, y: 0 });
-  const appName = settings?.app_name || 'manageteam';
 
   const {
     user,
@@ -113,15 +111,8 @@ export default function Welcome() {
           transition={{ duration: 0.5 }}
           className="relative z-10 max-w-xl"
         >
-          <div className="flex items-center gap-3 mb-12">
-            <div className="w-12 h-12 bg-lime-400 rounded-xl flex items-center justify-center overflow-hidden shadow-[0_0_24px_rgba(163,211,18,0.28)]">
-              {settings?.app_logo ? (
-                <img src={settings.app_logo} alt={appName} className="h-full w-full object-cover" />
-              ) : (
-                <Building2 className="w-7 h-7 text-black" />
-              )}
-            </div>
-            <span className="text-2xl font-bold">{appName}</span>
+          <div className="mb-12">
+            <BrandLogo className="h-11" />
           </div>
 
           <h1 className="text-4xl lg:text-5xl font-bold leading-tight mb-6">
@@ -150,15 +141,8 @@ export default function Welcome() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="w-full max-w-sm"
         >
-          <div className="lg:hidden flex items-center gap-3 mb-8 justify-center">
-            <div className="w-10 h-10 bg-lime-400 rounded-xl flex items-center justify-center overflow-hidden">
-              {settings?.app_logo ? (
-                <img src={settings.app_logo} alt={appName} className="h-full w-full object-cover" />
-              ) : (
-                <Building2 className="w-6 h-6 text-black" />
-              )}
-            </div>
-            <span className="text-xl font-bold text-white">{appName}</span>
+          <div className="lg:hidden flex justify-center mb-8">
+            <BrandLogo className="h-9" />
           </div>
 
           <div className="text-center mb-8">

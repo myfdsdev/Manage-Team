@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import toast from "react-hot-toast";
-import { ArrowRight, Loader2, Lock, Mail, Rocket, User } from "lucide-react";
+import { ArrowRight, Loader2, Lock, Mail, User } from "lucide-react";
+import BrandLogo from "@/components/BrandLogo";
 
 import { useAuth } from "@/lib/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -60,14 +61,8 @@ export default function JoinAdmin() {
       />
 
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4 py-10">
-        <div className="mb-8 flex items-center gap-2">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-lime-400/30 bg-lime-400/10">
-            <Rocket className="h-5 w-5 text-lime-300" />
-          </div>
-          <span className="text-lg font-extrabold tracking-tight">
-            <span className="text-white">manage</span>
-            <span className="text-lime-400">team</span>
-          </span>
+        <div className="mb-8">
+          <BrandLogo className="h-10" />
         </div>
 
         <motion.div

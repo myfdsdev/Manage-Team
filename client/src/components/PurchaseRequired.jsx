@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Lock, LogOut } from "lucide-react";
 import { useAuth } from "@/lib/AuthContext";
+import BrandLogo from "@/components/BrandLogo";
 
 // Full-screen paywall shown to any logged-in user who hasn't unlocked the app.
 export default function PurchaseRequired() {
@@ -21,6 +22,7 @@ export default function PurchaseRequired() {
       />
 
       <div className="relative z-10 flex min-h-screen flex-col items-center justify-center px-4">
+        <BrandLogo className="h-9 mb-8" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

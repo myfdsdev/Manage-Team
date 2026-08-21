@@ -3,7 +3,6 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import toast from "react-hot-toast";
 import {
-  AlertOctagon,
   AlertTriangle,
   ArrowLeft,
   ArrowRight,
@@ -22,7 +21,6 @@ import {
   Pin,
   RefreshCw,
   Rocket,
-  Shield,
   Sparkles,
   Star,
   Trash2,
@@ -42,6 +40,7 @@ import { base44 } from "@/api/base44Client";
 import { useAuth } from "@/lib/AuthContext";
 import { useCompany } from "@/lib/CompanyContext";
 import { createPageUrl } from "@/utils";
+import BrandLogo from "@/components/BrandLogo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -345,14 +344,7 @@ export default function CompanySetup() {
         {/* Top bar — matches the layout sketch:
             [manageteam logo] ........ [👑 Super Admin] [G email pill] [Logout] */}
         <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between gap-3 px-4 py-5">
-          <div className="flex items-center gap-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg border border-lime-400/30 bg-lime-400/10">
-              <Sparkles className="h-4 w-4 text-lime-300" />
-            </div>
-            <span className="text-sm font-semibold tracking-wide text-white">
-              manageteam
-            </span>
-          </div>
+          <BrandLogo className="h-8" />
 
           <div className="flex items-center gap-2 sm:gap-3">
             {user?.role === "super_admin" && (
