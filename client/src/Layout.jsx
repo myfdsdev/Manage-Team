@@ -31,6 +31,7 @@ import {
   DollarSign,
   ShieldCheck,
   MessageCircleMore,
+  GraduationCap,
   Crown,
   ArrowLeft,
 } from "lucide-react";
@@ -54,6 +55,7 @@ const employeeNavItems = [
   { name: "Leaderboard", page: "Leaderboard", icon: Trophy },
   { name: "Projects", page: "Projects", icon: LayoutDashboard },
   { name: "Groups", page: "Groups", icon: Users },
+  { name: "Training", page: "Training", icon: GraduationCap },
   { name: "Direct Messages", page: "DirectMessages", icon: MessageCircleMore },
   { name: "My Profile", page: "MyProfile", icon: UserCircle },
 ];
@@ -70,6 +72,7 @@ const adminNavItems = [
   { name: "Leaderboard", page: "Leaderboard", icon: Trophy },
   { name: "Projects", page: "Projects", icon: LayoutDashboard },
   { name: "Groups", page: "Groups", icon: Users },
+  { name: "Training", page: "Training", icon: GraduationCap },
   { name: "Direct Messages", page: "DirectMessages", icon: Users },
   { name: "My Profile", page: "MyProfile", icon: UserCircle },
 ];

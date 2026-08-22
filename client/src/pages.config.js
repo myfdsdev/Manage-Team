@@ -33,6 +33,7 @@ import CompanySettings from './pages/admin/CompanySettings';
 import DomainSettings from './pages/admin/DomainSettings';
 import MySalary from './pages/MySalary';
 import SuperAdmin from './pages/SuperAdmin';
+import Training from './pages/Training';
 import JoinAdmin from './pages/JoinAdmin';
 import JoinMember from './pages/JoinMember';
 import PurchaseRequired from './components/PurchaseRequired';
@@ -67,6 +68,7 @@ export const PAGES = {
     "SalaryBoard": SalaryManagement,
     "SalaryConfig": SalaryManagement,
     "Settings": Settings,
+    "Training": Training,
     "SuperAdmin": SuperAdmin,
     "Welcome": Welcome,
     "Login": Login,

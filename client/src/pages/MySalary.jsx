@@ -218,7 +218,7 @@ export default function MySalary() {
                         variant="outline"
                         onClick={() => handleDownload(p)}
                         disabled={!p.payslip_pdf_url}
-                        className="gap-2"
+                        className="gap-2 border-lime-400/20 bg-transparent text-white hover:bg-lime-400/10 hover:text-lime-300 disabled:opacity-40"
                       >
                         <Download className="w-4 h-4" />
                         PDF
